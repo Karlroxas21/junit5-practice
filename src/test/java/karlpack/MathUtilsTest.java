@@ -9,17 +9,22 @@ import org.junit.jupiter.api.condition.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MathUtilsTest {
     MathUtils mathUtils;
+    TestReporter testReporter;
+    TestInfo testInfo;
 
     @BeforeEach
-    void mathUtils() {
+    void mathUtils(TestReporter testReporter, TestInfo testInfo) {
         mathUtils = new MathUtils();
+        this.testReporter = testReporter;
+        this.testInfo = testInfo;
+        testReporter.publishEntry("Running " + testInfo.getDisplayName() + "with tags" + testInfo.getTags()); // print timestamps and information
+
     }
 
 
     @Test
-    @DisplayName("Karl Test") //display name in test
-//    @Disabled
-        //disable the test
+    @DisplayName("add test") //display name in test
+//    @Disabled //disable the test
     void addTest() {
         int expected = 10;
         int actual = mathUtils.add(5, 5);
@@ -27,6 +32,8 @@ public class MathUtilsTest {
     }
 
     @Test
+    @Tag("Me")
+    @DisplayName("area of circle")
     void areaOfCircleTest() {
         double expected = 314.1592653589793;
         double actual = mathUtils.areaOfCircle(10);
@@ -35,21 +42,23 @@ public class MathUtilsTest {
 
     @Test
 //    @EnabledOnJre(JRE.JAVA_8) // enable on specific JRE only.
-    @EnabledOnOs(OS.WINDOWS)
+    //@EnabledOnOs(OS.WINDOWS)
         // enable on specific OS.
+    @DisplayName("Divide Test")
     void divideTest() {
 //        assumeTrue(true); // if true, the test runs, vice versa if true.
         assertThrows(ArithmeticException.class, () -> mathUtils.divide(1, 0), "If 0, Should throw");
     }
     @Nested
     @DisplayName("Nested")
+    @Tag("Me")
     class nestMeTest {
 
         @Test
-//        @DisplayName("Karl Test") //display name in test
+//        @DisplayName("add test") //display name in test
 //        @Disabled //disable the test
         void addTest() {
-            int expected = 90;
+            int expected = 10;
             int actual = mathUtils.add(5,5);
 
             assertEquals(expected, actual, () ->"add Method should sum " + expected); /*use lambda expression if
@@ -64,7 +73,7 @@ public class MathUtilsTest {
         }
     }
 
-    @DisplayName("assertAll")
+    @DisplayName("assert all")
     @RepeatedTest(3) // repeat n test
     void testMultiply(RepetitionInfo repeat){
         assertAll(
