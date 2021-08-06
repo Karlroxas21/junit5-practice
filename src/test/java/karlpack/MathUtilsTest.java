@@ -18,7 +18,7 @@ public class MathUtilsTest {
 
     @Test
     @DisplayName("Karl Test") //display name in test
-    @Disabled
+//    @Disabled
         //disable the test
     void addTest() {
         int expected = 10;
@@ -35,7 +35,7 @@ public class MathUtilsTest {
 
     @Test
 //    @EnabledOnJre(JRE.JAVA_8) // enable on specific JRE only.
-    @EnabledOnOs(OS.LINUX)
+    @EnabledOnOs(OS.WINDOWS)
         // enable on specific OS.
     void divideTest() {
 //        assumeTrue(true); // if true, the test runs, vice versa if true.
@@ -49,9 +49,12 @@ public class MathUtilsTest {
 //        @DisplayName("Karl Test") //display name in test
 //        @Disabled //disable the test
         void addTest() {
-            int expected = 10;
+            int expected = 90;
             int actual = mathUtils.add(5,5);
-            assertEquals(expected, actual, "add Method should sum 10");
+
+            assertEquals(expected, actual, () ->"add Method should sum " + expected); /*use lambda expression if
+            the string is expensive to produce
+            */
         }
         @Test
         void areaOfCircleTest(){
@@ -60,9 +63,10 @@ public class MathUtilsTest {
             assertEquals(expected, actual);
         }
     }
-    @Test
+
     @DisplayName("assertAll")
-    void testMultiply(){
+    @RepeatedTest(3) // repeat n test
+    void testMultiply(RepetitionInfo repeat){
         assertAll(
                 // [() ->]is lambda
                 () -> assertEquals(4, mathUtils.multiply(2,2)),
